@@ -73,3 +73,136 @@ class CalculoInconsistenteError(SoftwareFJError):
     # Se lanza cuando el cálculo de tarifas, impuestos o descuentos genera un valor ilógico.
     def __init__(self, mensaje: str):
         super().__init__(mensaje, codigo="ERR-CALCULO")
+
+# Módulo de entidades generales y clientes.
+# Implementa la clase abstracta base del sistema y la clase Cliente
+# aplicando encapsulación estricta y validaciones de integridad de datos.
+
+from abc import ABC, abstractmethod
+from excepciones_logs import DatoInvalidoError, logger
+
+
+class EntidadSistema(ABC):
+    # Clase abstracta base:
+    # Representa cualquier entidad identificable dentro de Software FJ
+    # (Clientes, Servicios y Reservas).
+
+    def __init__(self, id_entidad: str):
+        self.id = id_entidad
+
+    @property
+    def id(self) -> str:
+        # Getter del identificador único de la entidad.
+        return self._id
+
+    @id.setter
+    def id(self, valor: str) -> None:
+        # Setter con validación estricta: impide identificadores vacíos o no textuales.
+        if not isinstance(valor, str) or not valor.strip():
+            raise DatoInvalidoError("El identificador de la entidad debe ser una cadena no vacía.")
+        self._id = valor.strip().upper()
+
+    @abstractmethod
+    def obtener_resumen(self) -> str:
+        # Método abstracto que cada subclase debe sobrescribir (Polimorfismo).
+        pass
+
+
+class Cliente(EntidadSistema):
+    # Clase Cliente:
+    # Hereda de EntidadSistema. Encapsula los datos personales del cliente
+    # (nombre, documento, correo y teléfono) protegiéndolos contra asignaciones inválidas.
+
+    def __init__(
+        self,
+        id_cliente: str,
+        nombre: str,
+        documento: str,
+        correo: str,
+        telefono: str,
+        activo: bool = True,
+    ):
+        super().__init__(id_cliente)
+
+        # Invoca los setters encapsulados para validar cada atributo al crear el objeto.
+        self.nombre = nombre
+        self.documento = documento
+        self.correo = correo
+        self.telefono = telefono
+        self._activo = bool(activo)
+
+        logger.info(f"Cliente registrado en memoria: {self.obtener_resumen()}")
+
+    @property
+    def nombre(self) -> str:
+        # Retorna el nombre del cliente.
+        return self._nombre
+
+    @nombre.setter
+    def nombre(self, valor: str) -> None:
+        # Valida que el nombre tenga al menos 3 caracteres.
+        if not isinstance(valor, str) or len(valor.strip()) < 3:
+            raise DatoInvalidoError(f"Nombre de cliente inválido: '{valor}'. Mínimo 3 caracteres.")
+        self._nombre = valor.strip()
+
+    @property
+    def documento(self) -> str:
+        # Retorna el documento de identidad.
+        return self._documento
+
+    @documento.setter
+    def documento(self, valor: str) -> None:
+        # Valida que el documento sea numérico y tenga al menos 6 dígitos.
+        if not isinstance(valor, str) or not valor.strip().isdigit() or len(valor.strip()) < 6:
+            raise DatoInvalidoError(
+                f"Documento inválido: '{valor}'. Debe contener al menos 6 dígitos numéricos."
+            )
+        self._documento = valor.strip()
+
+    @property
+    def correo(self) -> str:
+        # Retorna el correo electrónico en minúsculas.
+        return self._correo
+
+    @correo.setter
+    def correo(self, valor: str) -> None:
+        # Valida formato básico de correo electrónico.
+        if (
+            not isinstance(valor, str)
+            or "@" not in valor
+            or "." not in valor.split("@")[-1]
+            or len(valor.strip()) < 6
+        ):
+            raise DatoInvalidoError(f"Correo electrónico inválido: '{valor}'.")
+        self._correo = valor.strip().lower()
+
+    @property
+    def telefono(self) -> str:
+        # Retorna el teléfono de contacto.
+        return self._telefono
+
+    @telefono.setter
+    def telefono(self, valor: str) -> None:
+        # Valida que el teléfono contenga al menos 7 dígitos numéricos.
+        limpio = str(valor).strip() if valor is not None else ""
+        if not limpio.isdigit() or len(limpio) < 7:
+            raise DatoInvalidoError(f"Teléfono inválido: '{valor}'. Debe tener al menos 7 dígitos.")
+        self._telefono = limpio
+
+    @property
+    def activo(self) -> bool:
+        # Indica si el cliente se encuentra habilitado para reservar.
+        return self._activo
+
+    def desactivar(self) -> None:
+        # Inhabilita al cliente para futuras reservas conservando su historial.
+        self._activo = False
+        logger.warning(f"Cliente {self._id} ({self._nombre}) marcado como INACTIVO.")
+
+    def obtener_resumen(self) -> str:
+        # Implementación polimórfica del método abstracto de EntidadSistema.
+        estado = "Activo" if self._activo else "Inactivo"
+        return (
+            f"Cliente[{self._id}] | Nombre: {self._nombre} | Doc: {self._documento} "
+            f"| Email: {self._correo} | Estado: {estado}"
+        )

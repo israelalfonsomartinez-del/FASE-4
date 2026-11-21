@@ -485,3 +485,166 @@ class AsesoriaEspecializada(Servicio):
             f"Asesoría[{self._id}] '{self.nombre}' | Área: {self.especialidad} "
             f"| Nivel: {self.nivel_consultor} | Base: ${self._tarifa_base:,.0f}/h"
         )
+
+# Módulo de gestión de reservas y ciclo de estados.
+# Implementa la clase Reserva que asocia un Cliente con un Servicio, calcula
+# el costo total de forma polimórfica y controla las transiciones de estado.
+
+from datetime import datetime
+from entidades import Cliente, EntidadSistema
+from excepciones_logs import (
+    DatoInvalidoError,
+    OperacionNoPermitidaError,
+    ServicioNoDisponibleError,
+    SoftwareFJError,
+    logger,
+)
+from servicios import AlquilerEquipo, Servicio
+
+
+class Reserva(EntidadSistema):
+    # Clase Reserva:
+    # Integra Cliente, Servicio, duración y estado, implementando confirmación,
+    # cancelación y procesamiento con manejo estricto de excepciones.
+
+    ESTADO_PENDIENTE = "PENDIENTE"
+    ESTADO_CONFIRMADA = "CONFIRMADA"
+    ESTADO_CANCELADA = "CANCELADA"
+    ESTADO_COMPLETADA = "COMPLETADA"
+
+    def __init__(
+        self,
+        id_reserva: str,
+        cliente: Cliente,
+        servicio: Servicio,
+        duracion: int,
+        descuento_pct: float = 0.0,
+        impuesto_pct: float = 0.19,
+        **parametros_servicio,
+    ):
+        super().__init__(id_reserva)
+
+        if not isinstance(cliente, Cliente):
+            raise DatoInvalidoError("La reserva requiere una instancia válida de Cliente.")
+        if not cliente.activo:
+            raise OperacionNoPermitidaError(
+                f"El cliente '{cliente.nombre}' ({cliente.id}) está inactivo y no puede reservar."
+            )
+
+        if not isinstance(servicio, Servicio):
+            raise DatoInvalidoError("La reserva requiere una instancia válida de Servicio.")
+        if not servicio.disponible:
+            raise ServicioNoDisponibleError(
+                f"El servicio '{servicio.nombre}' ({servicio.id}) no está disponible."
+            )
+
+        self._cliente = cliente
+        self._servicio = servicio
+        self._duracion = duracion
+        self._descuento_pct = descuento_pct
+        self._impuesto_pct = impuesto_pct
+        self._parametros_servicio = parametros_servicio
+        self._estado = self.ESTADO_PENDIENTE
+        self._fecha_creacion = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        # Invoca el método sobrecargado del servicio para validar parámetros y calcular costo.
+        self._costo_total = self._servicio.calcular_costo(
+            duracion=self._duracion,
+            descuento_pct=self._descuento_pct,
+            impuesto_pct=self._impuesto_pct,
+            **self._parametros_servicio,
+        )
+
+        logger.info(f"Reserva creada en estado PENDIENTE -> {self.obtener_resumen()}")
+
+    @property
+    def cliente(self) -> Cliente:
+        # Retorna el cliente asociado a la reserva.
+        return self._cliente
+
+    @property
+    def servicio(self) -> Servicio:
+        # Retorna el servicio reservado.
+        return self._servicio
+
+    @property
+    def estado(self) -> str:
+        # Retorna el estado actual de la reserva.
+        return self._estado
+
+    @property
+    def costo_total(self) -> float:
+        # Retorna el costo total calculado de la reserva.
+        return self._costo_total
+
+    def confirmar(self) -> None:
+        # Confirma una reserva pendiente y bloquea disponibilidad o descuenta inventario.
+        if self._estado != self.ESTADO_PENDIENTE:
+            raise OperacionNoPermitidaError(
+                f"No se puede confirmar la reserva {self._id} en estado '{self._estado}'."
+            )
+
+        if not self._servicio.disponible:
+            raise ServicioNoDisponibleError(
+                f"El servicio '{self._servicio.nombre}' dejó de estar disponible."
+            )
+
+        if isinstance(self._servicio, AlquilerEquipo):
+            cantidad = self._parametros_servicio.get("cantidad", 1)
+            self._servicio.descontar_stock(cantidad)
+        else:
+            self._servicio.disponible = False
+
+        self._estado = self.ESTADO_CONFIRMADA
+        logger.info(f"Reserva {self._id} CONFIRMADA. Total: ${self._costo_total:,.2f}")
+
+    def cancelar(self, motivo: str = "Solicitud del cliente") -> None:
+        # Cancela una reserva pendiente o confirmada y libera los recursos asociados.
+        if self._estado in (self.ESTADO_CANCELADA, self.ESTADO_COMPLETADA):
+            raise OperacionNoPermitidaError(
+                f"Imposible cancelar la reserva {self._id}: su estado actual es '{self._estado}'."
+            )
+
+        if self._estado == self.ESTADO_CONFIRMADA:
+            if isinstance(self._servicio, AlquilerEquipo):
+                cantidad = self._parametros_servicio.get("cantidad", 1)
+                self._servicio.restaurar_stock(cantidad)
+            else:
+                self._servicio.disponible = True
+
+        self._estado = self.ESTADO_CANCELADA
+        logger.warning(f"Reserva {self._id} CANCELADA. Motivo: {motivo}")
+
+    def procesar(self) -> str:
+        # Procesa y finaliza una reserva confirmada.
+        # Aplica captura y encadenamiento de excepciones ante fallos imprevistos.
+        try:
+            if self._estado != self.ESTADO_CONFIRMADA:
+                raise OperacionNoPermitidaError(
+                    f"Solo se procesan reservas CONFIRMADAS. Estado actual: '{self._estado}'."
+                )
+
+            if not isinstance(self._servicio, AlquilerEquipo):
+                self._servicio.disponible = True
+
+            self._estado = self.ESTADO_COMPLETADA
+            comprobante = (
+                f"COMPROBANTE {self._id} | Cliente: {self._cliente.nombre} | "
+                f"Servicio: {self._servicio.nombre} | Total: ${self._costo_total:,.2f}"
+            )
+            logger.info(f"Reserva {self._id} COMPLETADA. {comprobante}")
+            return comprobante
+
+        except SoftwareFJError:
+            raise
+        except Exception as err:
+            raise OperacionNoPermitidaError(
+                f"Error inesperado durante el procesamiento de la reserva {self._id}."
+            ) from err
+
+    def obtener_resumen(self) -> str:
+        # Retorna un resumen legible de la reserva.
+        return (
+            f"Reserva[{self._id}] | Cliente: {self._cliente.nombre} | "
+            f"Servicio: {self._servicio.nombre} | Duración: {self._duracion} | "
+            f"Total: ${self._costo_total:,.2f} | Estado: {self._estado}"

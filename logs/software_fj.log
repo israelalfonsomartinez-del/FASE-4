@@ -1,31 +1,31 @@
-2026-11-21 16:27:16 | INFO     | ejerccicio_1 | === INICIO DEL SISTEMA INTEGRAL SOFTWARE FJ ===
-2026-11-21 16:27:16 | INFO     | ejerccicio_1 | Cliente registrado en memoria: Cliente[CLI-01] | Nombre: Laura Mendoza | Doc: 1020304050 | Email: laura@empresa.co | Estado: Activo
-2026-11-21 16:27:16 | DEBUG    | ejerccicio_1 | Auditoría registro cliente (CLI-01) | Total clientes en memoria: 1
-2026-11-21 16:27:16 | INFO     | ejerccicio_1 | Cliente registrado en memoria: Cliente[CLI-02] | Nombre: Carlos Ramírez | Doc: 80901020 | Email: carlos.r@tech.com | Estado: Activo
-2026-11-21 16:27:16 | DEBUG    | ejerccicio_1 | Auditoría registro cliente (CLI-02) | Total clientes en memoria: 2
-2026-11-21 16:27:16 | ERROR    | ejerccicio_1 | [FALLO REGISTRO CLIENTE] [ERR-VALIDACION] Documento inválido: '123'. Debe contener al menos 6 dígitos numéricos.
-2026-11-21 16:27:16 | DEBUG    | ejerccicio_1 | Auditoría registro cliente (CLI-03) | Total clientes en memoria: 2
-2026-11-21 16:27:16 | INFO     | ejerccicio_1 | Servicio registrado -> Sala[SRV-S01] 'Sala Innovación Bogotá' | Tarifa: $120,000/h | Cap. Máx: 15 pers. | Con VideoBeam
-2026-11-21 16:27:16 | DEBUG    | ejerccicio_1 | Auditoría registro servicio | Total servicios en memoria: 1
-2026-11-21 16:27:16 | INFO     | ejerccicio_1 | Servicio registrado -> Equipo[SRV-E01] 'Workstation Dell Precision' (Workstation) | Tarifa: $85,000/día | Stock: 4 unid.
-2026-11-21 16:27:16 | DEBUG    | ejerccicio_1 | Auditoría registro servicio | Total servicios en memoria: 2
-2026-11-21 16:27:16 | INFO     | ejerccicio_1 | Servicio registrado -> Asesoría[SRV-A01] 'Consultoría Arquitectura Cloud' | Área: AWS & Kubernetes | Nivel: Arquitecto | Base: $180,000/h
-2026-11-21 16:27:16 | DEBUG    | ejerccicio_1 | Auditoría registro servicio | Total servicios en memoria: 3
-2026-11-21 16:27:16 | ERROR    | ejerccicio_1 | [FALLO REGISTRO SERVICIO] [ERR-VALIDACION] La tarifa base 'tarifa_erronea' no es un valor numérico válido.
-2026-11-21 16:27:16 | DEBUG    | ejerccicio_1 | Auditoría registro servicio | Total servicios en memoria: 3
-2026-11-21 16:27:16 | INFO     | ejerccicio_1 | Reserva creada en estado PENDIENTE -> Reserva[RES-001] | Cliente: Laura Mendoza | Servicio: Sala Innovación Bogotá | Duración: 4 | Total: $591,192.00 | Estado: PENDIENTE
-2026-11-21 16:27:16 | INFO     | ejerccicio_1 | Reserva RES-001 CONFIRMADA. Total: $591,192.00
-2026-11-21 16:27:16 | DEBUG    | ejerccicio_1 | Fin transacción reserva RES-001 | Reservas almacenadas en memoria: 1
-2026-11-21 16:27:16 | ERROR    | ejerccicio_1 | [FALLO RESERVA RES-002] [ERR-DISPONIBILIDAD] El servicio 'Sala Innovación Bogotá' (SRV-S01) no está disponible.
-2026-11-21 16:27:16 | DEBUG    | ejerccicio_1 | Fin transacción reserva RES-002 | Reservas almacenadas en memoria: 1
-2026-11-21 16:27:16 | INFO     | ejerccicio_1 | Reserva creada en estado PENDIENTE -> Reserva[RES-003] | Cliente: Carlos Ramírez | Servicio: Workstation Dell Precision | Duración: 5 | Total: $1,211,250.00 | Estado: PENDIENTE
-2026-11-21 16:27:16 | INFO     | ejerccicio_1 | Reserva RES-003 CONFIRMADA. Total: $1,211,250.00
-2026-11-21 16:27:16 | DEBUG    | ejerccicio_1 | Fin transacción reserva RES-003 | Reservas almacenadas en memoria: 2
-2026-11-21 16:27:16 | ERROR    | ejerccicio_1 | [FALLO RESERVA RES-004] [ERR-VALIDACION] Stock insuficiente para 'Workstation Dell Precision': solicitados 3, disponibles 1.
-2026-11-21 16:27:16 | DEBUG    | ejerccicio_1 | Fin transacción reserva RES-004 | Reservas almacenadas en memoria: 2
-2026-11-21 16:27:16 | INFO     | ejerccicio_1 | Reserva RES-001 COMPLETADA. COMPROBANTE RES-001 | Cliente: Laura Mendoza | Servicio: Sala Innovación Bogotá | Total: $591,192.00
-2026-11-21 16:27:16 | ERROR    | ejerccicio_1 | [FALLO GESTIÓN RESERVA RES-001] [ERR-OPERACION] Imposible cancelar la reserva RES-001: su estado actual es 'COMPLETADA'.
-2026-11-21 16:27:16 | INFO     | ejerccicio_1 | Reserva creada en estado PENDIENTE -> Reserva[RES-005] | Cliente: Laura Mendoza | Servicio: Consultoría Arquitectura Cloud | Duración: 3 | Total: $819,315.00 | Estado: PENDIENTE
-2026-11-21 16:27:16 | INFO     | ejerccicio_1 | Reserva RES-005 CONFIRMADA. Total: $819,315.00
-2026-11-21 16:27:16 | DEBUG    | ejerccicio_1 | Fin transacción reserva RES-005 | Reservas almacenadas en memoria: 3
-2026-11-21 16:27:16 | INFO     | ejerccicio_1 | === FIN DE EJECUCIÓN | Exitosas: 9 | Fallidas controladas: 5 ===
+2026-11-21 16:31:46 | INFO     | ejerccicio_1 | === INICIO DEL SISTEMA INTEGRAL SOFTWARE FJ ===
+2026-11-21 16:31:46 | INFO     | ejerccicio_1 | Cliente registrado en memoria: Cliente[CLI-01] | Nombre: Laura Mendoza | Doc: 1020304050 | Email: laura@empresa.co | Estado: Activo
+2026-11-21 16:31:46 | DEBUG    | ejerccicio_1 | Auditoría registro cliente (CLI-01) | Total clientes en memoria: 1
+2026-11-21 16:31:46 | INFO     | ejerccicio_1 | Cliente registrado en memoria: Cliente[CLI-02] | Nombre: Carlos Ramírez | Doc: 80901020 | Email: carlos.r@tech.com | Estado: Activo
+2026-11-21 16:31:46 | DEBUG    | ejerccicio_1 | Auditoría registro cliente (CLI-02) | Total clientes en memoria: 2
+2026-11-21 16:31:46 | ERROR    | ejerccicio_1 | [FALLO REGISTRO CLIENTE] [ERR-VALIDACION] Documento inválido: '123'. Debe contener al menos 6 dígitos numéricos.
+2026-11-21 16:31:46 | DEBUG    | ejerccicio_1 | Auditoría registro cliente (CLI-03) | Total clientes en memoria: 2
+2026-11-21 16:31:46 | INFO     | ejerccicio_1 | Servicio registrado -> Sala[SRV-S01] 'Sala Innovación Bogotá' | Tarifa: $120,000/h | Cap. Máx: 15 pers. | Con VideoBeam
+2026-11-21 16:31:46 | DEBUG    | ejerccicio_1 | Auditoría registro servicio | Total servicios en memoria: 1
+2026-11-21 16:31:46 | INFO     | ejerccicio_1 | Servicio registrado -> Equipo[SRV-E01] 'Workstation Dell Precision' (Workstation) | Tarifa: $85,000/día | Stock: 4 unid.
+2026-11-21 16:31:46 | DEBUG    | ejerccicio_1 | Auditoría registro servicio | Total servicios en memoria: 2
+2026-11-21 16:31:46 | INFO     | ejerccicio_1 | Servicio registrado -> Asesoría[SRV-A01] 'Consultoría Arquitectura Cloud' | Área: AWS & Kubernetes | Nivel: Arquitecto | Base: $180,000/h
+2026-11-21 16:31:46 | DEBUG    | ejerccicio_1 | Auditoría registro servicio | Total servicios en memoria: 3
+2026-11-21 16:31:46 | ERROR    | ejerccicio_1 | [FALLO REGISTRO SERVICIO] [ERR-VALIDACION] La tarifa base 'tarifa_erronea' no es un valor numérico válido.
+2026-11-21 16:31:46 | DEBUG    | ejerccicio_1 | Auditoría registro servicio | Total servicios en memoria: 3
+2026-11-21 16:31:46 | INFO     | ejerccicio_1 | Reserva creada en estado PENDIENTE -> Reserva[RES-001] | Cliente: Laura Mendoza | Servicio: Sala Innovación Bogotá | Duración: 4 | Total: $591,192.00 | Estado: PENDIENTE
+2026-11-21 16:31:46 | INFO     | ejerccicio_1 | Reserva RES-001 CONFIRMADA. Total: $591,192.00
+2026-11-21 16:31:46 | DEBUG    | ejerccicio_1 | Fin transacción reserva RES-001 | Reservas almacenadas en memoria: 1
+2026-11-21 16:31:46 | ERROR    | ejerccicio_1 | [FALLO RESERVA RES-002] [ERR-DISPONIBILIDAD] El servicio 'Sala Innovación Bogotá' (SRV-S01) no está disponible.
+2026-11-21 16:31:46 | DEBUG    | ejerccicio_1 | Fin transacción reserva RES-002 | Reservas almacenadas en memoria: 1
+2026-11-21 16:31:46 | INFO     | ejerccicio_1 | Reserva creada en estado PENDIENTE -> Reserva[RES-003] | Cliente: Carlos Ramírez | Servicio: Workstation Dell Precision | Duración: 5 | Total: $1,211,250.00 | Estado: PENDIENTE
+2026-11-21 16:31:46 | INFO     | ejerccicio_1 | Reserva RES-003 CONFIRMADA. Total: $1,211,250.00
+2026-11-21 16:31:46 | DEBUG    | ejerccicio_1 | Fin transacción reserva RES-003 | Reservas almacenadas en memoria: 2
+2026-11-21 16:31:46 | ERROR    | ejerccicio_1 | [FALLO RESERVA RES-004] [ERR-VALIDACION] Stock insuficiente para 'Workstation Dell Precision': solicitados 3, disponibles 1.
+2026-11-21 16:31:46 | DEBUG    | ejerccicio_1 | Fin transacción reserva RES-004 | Reservas almacenadas en memoria: 2
+2026-11-21 16:31:46 | INFO     | ejerccicio_1 | Reserva RES-001 COMPLETADA. COMPROBANTE RES-001 | Cliente: Laura Mendoza | Servicio: Sala Innovación Bogotá | Total: $591,192.00
+2026-11-21 16:31:46 | ERROR    | ejerccicio_1 | [FALLO GESTIÓN RESERVA RES-001] [ERR-OPERACION] Imposible cancelar la reserva RES-001: su estado actual es 'COMPLETADA'.
+2026-11-21 16:31:46 | INFO     | ejerccicio_1 | Reserva creada en estado PENDIENTE -> Reserva[RES-005] | Cliente: Laura Mendoza | Servicio: Consultoría Arquitectura Cloud | Duración: 3 | Total: $819,315.00 | Estado: PENDIENTE
+2026-11-21 16:31:46 | INFO     | ejerccicio_1 | Reserva RES-005 CONFIRMADA. Total: $819,315.00
+2026-11-21 16:31:46 | DEBUG    | ejerccicio_1 | Fin transacción reserva RES-005 | Reservas almacenadas en memoria: 3
+2026-11-21 16:31:46 | INFO     | ejerccicio_1 | === FIN DE EJECUCIÓN | Exitosas: 9 | Fallidas controladas: 5 ===

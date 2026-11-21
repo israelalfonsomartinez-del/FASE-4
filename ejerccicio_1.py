@@ -38,10 +38,7 @@ def configurar_logger() -> logging.Logger:
 # Instancia global del logger utilizada por todas las clases y métodos del sistema.
 logger = configurar_logger()
 
-
-# ==============================================================================
 # JERARQUÍA DE EXCEPCIONES PERSONALIZADAS
-# ==============================================================================
 
 class SoftwareFJError(Exception):
     # Excepción base del sistema; agrupa los errores del dominio bajo un código y mensaje[cite: 2].
@@ -83,10 +80,7 @@ class CalculoInconsistenteError(SoftwareFJError):
     def __init__(self, mensaje: str):
         super().__init__(mensaje, codigo="ERR-CALCULO")
 
-
-# ==============================================================================
 # ENTIDADES GENERALES Y CLIENTE
-# ==============================================================================
 
 class EntidadSistema(ABC):
     # Clase abstracta general del sistema para entidades con identificador único[cite: 2].
@@ -209,10 +203,7 @@ class Cliente(EntidadSistema):
             f"| Email: {self._correo} | Estado: {estado}"
         )
 
-
-# ==============================================================================
 # SERVICIOS Y SUBCLASES
-# ==============================================================================
 
 class Servicio(EntidadSistema, ABC):
     # Clase abstracta base para los servicios ofrecidos por Software FJ[cite: 1, 2].
@@ -486,10 +477,7 @@ class AsesoriaEspecializada(Servicio):
             f"| Nivel: {self.nivel_consultor} | Base: ${self._tarifa_base:,.0f}/h"
         )
 
-
-# ==============================================================================
 # GESTIÓN DE RESERVAS Y CICLO DE ESTADOS
-# ==============================================================================
 
 class Reserva(EntidadSistema):
     # Integra un Cliente, un Servicio, duración, estado y costo calculado[cite: 2].
@@ -645,10 +633,7 @@ class Reserva(EntidadSistema):
             f"Total: ${self._costo_total:,.2f} | Estado: {self._estado}"
         )
 
-
-# ==============================================================================
 # GESTOR EN MEMORIA Y SIMULACIÓN INTEGRAL
-# ==============================================================================
 
 class GestorSoftwareFJ:
     # Administra clientes, servicios y reservas en listas en memoria (sin base de datos)[cite: 1, 2, 3].
